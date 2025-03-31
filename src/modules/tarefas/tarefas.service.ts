@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Tarefa } from './entities/tarefas.entity';
 import { CreateTarefaDto } from './dtos/create-tarefa.dto';
@@ -24,12 +23,11 @@ export class TarefasService {
 
   async create(createTarefaDto: Partial<CreateTarefaDto>): Promise<Tarefa> {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    const newId = uuidv4();
     const newTarefa: Tarefa = {
-      id: newId,
       name: createTarefaDto.name || '',
       description: createTarefaDto.description || '',
       isCompleted: false,
+      id: '',
     };
     this.tarefas.push(newTarefa);
     return newTarefa;

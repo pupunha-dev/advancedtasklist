@@ -3,4 +3,5 @@ export class Tarefa {
   name: string;
   description: string;
   isCompleted: boolean;
+  createdAt?: Date;
 }
