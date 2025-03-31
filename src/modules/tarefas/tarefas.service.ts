@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Tarefa } from './entities/tarefas.entity';
+import { CreateTarefaDto } from './dtos/create-tarefa.dto';
+import { UpdateTarefaDto } from './dtos/update-tarefa.dto';
 
 @Injectable()
 export class TarefasService {
@@ -20,14 +22,14 @@ export class TarefasService {
     return resultado;
   }
 
-  async create(body: Partial<Tarefa>): Promise<Tarefa> {
+  async create(createTarefaDto: Partial<CreateTarefaDto>): Promise<Tarefa> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const newId = uuidv4();
     const newTarefa: Tarefa = {
       id: newId,
-      name: body.name || '',
-      description: body.description || '',
-      isCompleted: body.isCompleted || false,
+      name: createTarefaDto.name || '',
+      description: createTarefaDto.description || '',
+      isCompleted: false,
     };
     this.tarefas.push(newTarefa);
     return newTarefa;
@@ -35,7 +37,7 @@ export class TarefasService {
 
   async updateTarefa(
     id: string,
-    body: Omit<Partial<Tarefa>, 'id'>,
+    updateTarefaDto: Omit<Partial<UpdateTarefaDto>, 'id'>,
   ): Promise<Tarefa> {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const tarefaIndex = this.tarefas.findIndex((t) => t.id === id);
@@ -44,7 +46,7 @@ export class TarefasService {
     }
     this.tarefas[tarefaIndex] = {
       ...this.tarefas[tarefaIndex],
-      ...body,
+      ...updateTarefaDto,
     };
     return this.tarefas[tarefaIndex];
   }

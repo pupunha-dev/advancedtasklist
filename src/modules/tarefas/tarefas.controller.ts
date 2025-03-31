@@ -11,6 +11,8 @@ import {
 } from '@nestjs/common';
 import { TarefasService } from './tarefas.service';
 import { Tarefa } from './entities/tarefas.entity';
+import { CreateTarefaDto } from './dtos/create-tarefa.dto';
+import { UpdateTarefaDto } from './dtos/update-tarefa.dto';
 
 @Controller('tarefas')
 export class TarefasController {
@@ -28,16 +30,18 @@ export class TarefasController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createTarefa(@Body() body: Tarefa): Promise<Tarefa> {
-    return await this.tarefaService.create(body);
+  async createTarefa(
+    @Body() createTarefaDto: CreateTarefaDto,
+  ): Promise<Tarefa> {
+    return await this.tarefaService.create(createTarefaDto);
   }
 
   @Patch(':id')
   async updateTarefa(
     @Param('id') id: string,
-    @Body() body: Partial<Tarefa>,
+    @Body() updateTarefaDto: Partial<UpdateTarefaDto>,
   ): Promise<Tarefa> {
-    return await this.tarefaService.updateTarefa(id, body);
+    return await this.tarefaService.updateTarefa(id, updateTarefaDto);
   }
 
   @Delete(':id')
