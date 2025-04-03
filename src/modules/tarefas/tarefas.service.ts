@@ -52,11 +52,18 @@ export class TarefasService {
   }
 
   async deleteTarefa(id: string): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const tarefaIndex = this.tarefas.findIndex((t) => t.id === id);
-    if (tarefaIndex === -1) {
-      throw new NotFoundException('Id não encontrado');
+    const findTarefa = await this.prisma.tarefa.findFirst({
+      where: {
+        id: id,
+      },
+    });
+    if (!findTarefa) {
+      throw new NotFoundException('Tarefa nao encontrada.' + id);
     }
-    this.tarefas.splice(tarefaIndex, 1);
+    await this.prisma.tarefa.delete({
+      where: {
+        id: findTarefa.id,
+      },
+    });
   }
 }
